@@ -18,7 +18,7 @@ namespace PHPBB_Image_Pak_Creator
             {
                 Console.Write("Location: ");
                 string location = Console.ReadLine();
-
+                
                 if (!Directory.Exists(location))
                 {
                     ConsoleColor col = Console.ForegroundColor;
@@ -28,10 +28,25 @@ namespace PHPBB_Image_Pak_Creator
                     return;
                 }
 
+                Console.Write("Pak Name: ");
+                string pakName = Console.ReadLine();
+
+                Console.Write("Dimensions: ");
+                string dimension = Console.ReadLine();
+
+                if (!int.TryParse(dimension, out int parsed))
+                {
+                    ConsoleColor col = Console.ForegroundColor;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"'{dimension}' is not a number");
+                    Console.ForegroundColor = col;
+                    return;
+                }
+
                 string[] files = Directory.GetFiles(location);
 
                 List<string> lines = new List<string>();
-                string pakLocation = $"{location}/rogue_dawn.pak";
+                string pakLocation = $"{location}/{pakName}.pak";
 
                 foreach (string file in files)
                 {
@@ -66,7 +81,7 @@ namespace PHPBB_Image_Pak_Creator
 
                     emotion = emotion.Trim();
 
-                    string line = $"'{info.Name}', '{img.Width}', '{img.Height}', '1', '{emotion}', ':{info.Name.Replace(extension, "")}:',";
+                    string line = $"'{info.Name}', '{dimension}', '{dimension}', '1', '{emotion}', ':{info.Name.Replace(extension, "")}:',";
 
                     lines.Add(line);
                 }
